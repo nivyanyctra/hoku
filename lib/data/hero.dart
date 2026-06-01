@@ -671,7 +671,7 @@ final heroes = [
   Hero(
     id: "direnjie",
     name: "Di Renjie",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703140804795.jpg',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'DPS Marksman',
     typeHero: 'Ranged Harass',
@@ -700,7 +700,7 @@ final heroes = [
   Hero(
     id: "dianwei",
     name: "Dian Wei",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703135861893.jpg',
     heroClass: [HeroClass.fighter],
     typeHeroClass: 'Berserker',
     typeHero: 'Cleanup',
@@ -729,7 +729,7 @@ final heroes = [
   Hero(
     id: "diaochan",
     name: "Diaochan",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703143944433.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Formation Mage',
     typeHero: 'Sustained Damage/True Damage',
@@ -758,7 +758,7 @@ final heroes = [
   Hero(
     id: "dolia",
     name: "Dolia",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20231218/17028717486587.jpg',
     heroClass: [HeroClass.support],
     typeHeroClass: 'Buff Support',
     typeHero: 'Team Buffs',
@@ -787,7 +787,7 @@ final heroes = [
   Hero(
     id: "donghuang",
     name: "Donghuang",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703168222655.jpg',
     heroClass: [HeroClass.support, HeroClass.tank],
     typeHeroClass: 'Offensive Support',
     typeHero: 'Revorery/Sustained Crowd Control',
@@ -816,7 +816,7 @@ final heroes = [
   Hero(
     id: "drbian",
     name: "Dr Bian",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703133397987.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Formation Mage',
     typeHero: 'Sustained Damage/Heal',
@@ -845,7 +845,7 @@ final heroes = [
   Hero(
     id: "dun",
     name: "Dun",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20231113/16998611165120.jpeg',
     heroClass: [HeroClass.tank, HeroClass.fighter],
     typeHeroClass: 'Guardian Tank',
     typeHero: 'Gap-Close/Crowd Control',
@@ -874,7 +874,7 @@ final heroes = [
   Hero(
     id: "dyadia",
     name: "Dyadia",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240911/17260371074056.jpg',
     heroClass: [HeroClass.support, HeroClass.mage],
     typeHeroClass: 'Buff Support',
     typeHero: 'Team Buffs/Recovery',
@@ -903,7 +903,7 @@ final heroes = [
   Hero(
     id: "erin",
     name: "Erin",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703150778629.jpg',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'Deft Marksman',
     typeHero: 'Sustained Damage',
@@ -914,7 +914,7 @@ final heroes = [
       level: GolemDependencyLevel.highlyDependent,
     ),
     gamePhase: GamePhase.mid,
-    difficulty: Difficulty.medium,  
+    difficulty: Difficulty.medium,
     survivalAbility: ,
     attackDamage: ,
     basic: BasicStats(
@@ -932,7 +932,7 @@ final heroes = [
   Hero(
     id: "fang",
     name: "Fang",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703158139826.jpg',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'Artillery Marksman',
     typeHero: 'Gap-Close/Cleanup',
@@ -961,7 +961,7 @@ final heroes = [
   Hero(
     id: "fatih",
     name: "Fatih",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20250513/17471254343131.jpg',
     heroClass: [HeroClass.fighter],
     typeHeroClass: 'Berserker',
     typeHero: 'Lifesteal',
@@ -990,7 +990,7 @@ final heroes = [
   Hero(
     id: "feyd",
     name: "Feyd",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20250218/17398710057668.jpg',
     heroClass: [HeroClass.assassin],
     typeHeroClass: 'Roving Assassin',
     typeHero: 'Gap-Close/Cleanup',
@@ -1019,7 +1019,7 @@ final heroes = [
   Hero(
     id: "flowborn(mage)",
     name: "Flowborn (Mage)",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20250612/17497208355981.png',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Artillery Mage',
     typeHero: 'Sustained Damage',
@@ -1048,7 +1048,7 @@ final heroes = [
   Hero(
     id: "flowborn(marksman)",
     name: "Flowborn (Marksman)",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20250612/17497208355981.png',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'Nimble Marksman',
     typeHero: 'Sustained Damage',
@@ -1077,7 +1077,7 @@ final heroes = [
   Hero(
     id: "flowborn(tank)",
     name: "Flowborn (Tank)",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20250612/17497208355981.png',
     heroClass: [HeroClass.tank, HeroClass.fighter],
     typeHeroClass: 'Vanguard Tank',
     typeHero: 'Crowd Control',
@@ -1106,7 +1106,7 @@ final heroes = [
   Hero(
     id: "fuzi",
     name: "Fuzi",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703142673410.jpg',
     heroClass: [HeroClass.fighter],
     typeHeroClass: 'Berserker',
     typeHero: 'Gap-Close',
@@ -1135,7 +1135,7 @@ final heroes = [
   Hero(
     id: "ganmo",
     name: "Gan & Mo",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230302/16777673649926.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Artillery Mage',
     typeHero: 'Burst/Long Range Vision',
@@ -1164,7 +1164,7 @@ final heroes = [
   Hero(
     id: "gao",
     name: "Gao",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703130184130.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Formation Mage',
     typeHero: 'Sustained Damage/Damage Reduction',
@@ -1193,7 +1193,7 @@ final heroes = [
   Hero(
     id: "gaochanggong",
     name: "Gao Changgong",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703147869734.jpg',
     heroClass: [HeroClass.assassin],
     typeHeroClass: 'Burst Assassin',
     typeHero: 'Gap-Close/Cleanup',
@@ -1222,7 +1222,7 @@ final heroes = [
   Hero(
     id: "garo",
     name: "Garo",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703177656861.jpg',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'DPS Marksman',
     typeHero: 'Ranged Harass/Team Buffs',
@@ -1251,7 +1251,7 @@ final heroes = [
   Hero(
     id: "garuda",
     name: "Garuda",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20250925/17587939304703.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Artillery Mage',
     typeHero: 'Poke/Speed Up',
@@ -1280,7 +1280,7 @@ final heroes = [
   Hero(
     id: "guanyu",
     name: "Guan Yu",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230413/16813705518919.jpg',
     heroClass: [HeroClass.fighter],
     typeHeroClass: 'Charger',
     typeHero: 'Gap-Close/Initiate',
@@ -1309,7 +1309,7 @@ final heroes = [
   Hero(
     id: "guiguzi",
     name: "Guiguzi",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240407/17124728454584.jpeg',
     heroClass: [HeroClass.support],
     typeHeroClass: 'Offensive Support',
     typeHero: 'Crowd Control',
@@ -1338,7 +1338,7 @@ final heroes = [
   Hero(
     id: "hanxin",
     name: "Han Xin",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703146435725.jpg',
     heroClass: [HeroClass.assassin],
     typeHeroClass: 'Roving Assassin',
     typeHero: 'Gap-Close',
@@ -1367,7 +1367,7 @@ final heroes = [
   Hero(
     id: "haya",
     name: "Haya",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20251224/17665588023593.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Artillery Mage',
     typeHero: 'Ranged Harass',
@@ -1396,7 +1396,7 @@ final heroes = [
   Hero(
     id: "heino",
     name: "Heino",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20231218/17028845838364.jpg',
     heroClass: [HeroClass.mage, HeroClass.fighter],
     typeHeroClass: 'Formation Mage',
     typeHero: 'Poke/Recovery',
@@ -1425,7 +1425,7 @@ final heroes = [
   Hero(
     id: "houyi",
     name: "Hou Yi",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703155999339.jpg',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'DPS Marksman',
     typeHero: 'Crowd Control/Initiate',
@@ -1454,7 +1454,7 @@ final heroes = [
   Hero(
     id: "huangzhong",
     name: "Huang Zhong",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240226/17089352338657.jpg',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'DPS Marksman',
     typeHero: 'Cleanup/Ranged Harass',
@@ -1483,7 +1483,7 @@ final heroes = [
   Hero(
     id: "jing",
     name: "Jing",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703179459568.jpg',
     heroClass: [HeroClass.assassin],
     typeHeroClass: 'Roving Assassin',
     typeHero: 'Gap-Close/Cleanup',
@@ -1512,7 +1512,7 @@ final heroes = [
   Hero(
     id: "kaizer",
     name: "Kaizer",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703169941563.jpg',
     heroClass: [HeroClass.fighter, HeroClass.tank],
     typeHeroClass: 'Assassin Fighter',
     typeHero: '',
@@ -1541,7 +1541,7 @@ final heroes = [
   Hero(
     id: "kongming",
     name: "Kongming",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703169296836.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Ambush Mage',
     typeHero: 'Burst/Cleanup',
@@ -1570,7 +1570,7 @@ final heroes = [
   Hero(
     id: "kui",
     name: "Kui",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703161062276.jpg',
     heroClass: [HeroClass.support, HeroClass.mage],
     typeHeroClass: 'Offensive Support',
     typeHero: 'Crowd Control/Initiate',
@@ -1599,7 +1599,7 @@ final heroes = [
   Hero(
     id: "ladysun",
     name: "Lady Sun",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703127505481.jpg',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'Artillery Marksman',
     typeHero: 'Gap-Close/Cleanup',
@@ -1628,7 +1628,7 @@ final heroes = [
   Hero(
     id: "ladyzhen",
     name: "Lady Zhen",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230426/16824932901818.jpeg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Control Mage',
     typeHero: 'Crowd Control/Frozen',
@@ -1657,7 +1657,7 @@ final heroes = [
   Hero(
     id: "lam",
     name: "Lam",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703178882043.jpg',
     heroClass: [HeroClass.assassin, HeroClass.fighter],
     typeHeroClass: 'Roving Assassin',
     typeHero: 'Gap-Close/Cleanup',
@@ -1686,7 +1686,7 @@ final heroes = [
   Hero(
     id: "lapulapu",
     name: "Lapulapu",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20251024/17613060798434.jpg',
     heroClass: [HeroClass.support, HeroClass.tank],
     typeHeroClass: 'Defensive Support',
     typeHero: 'Crowd Control/Team Buffs',
@@ -1715,7 +1715,7 @@ final heroes = [
   Hero(
     id: "libai",
     name: "Li Bai",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230228/16775657665832.jpg',
     heroClass: [HeroClass.assassin],
     typeHeroClass: 'Roving Assassin',
     typeHero: 'Gap-Close/Cleanup',
@@ -1744,7 +1744,7 @@ final heroes = [
   Hero(
     id: "lixin",
     name: "Li Xin",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703177137916.jpg',
     heroClass: [HeroClass.fighter],
     typeHeroClass: 'Berserker',
     typeHero: 'Gap-Close/Crowd Control',
@@ -1773,7 +1773,7 @@ final heroes = [
   Hero(
     id: "lianpo",
     name: "Lian Po",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230302/16777674853978.png',
     heroClass: [HeroClass.tank],
     typeHeroClass: 'Vanguard Tank',
     typeHero: 'Crowd Control/Initiate',
@@ -1802,7 +1802,7 @@ final heroes = [
   Hero(
     id: "liang",
     name: "Liang",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230705/16885472029879.jpeg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Crowd Control Mage',
     typeHero: 'Crowd Control/Initiate',
@@ -1831,7 +1831,7 @@ final heroes = [
   Hero(
     id: "liubang",
     name: "Liu Bang",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240823/17243982122130.jpg',
     heroClass: [HeroClass.tank, HeroClass.mage],
     typeHeroClass: 'Guardian Tank',
     typeHero: 'Support',
@@ -1860,7 +1860,7 @@ final heroes = [
   Hero(
     id: "liubei",
     name: "Liu Bei",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240306/17097124878002.jpg',
     heroClass: [HeroClass.fighter],
     typeHeroClass: 'Berserker',
     typeHero: 'Dash/Cleanup',
@@ -1889,7 +1889,7 @@ final heroes = [
   Hero(
     id: "liushan",
     name: "Liu Shan",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703129576050.jpg',
     heroClass: [HeroClass.support, HeroClass.tank],
     typeHeroClass: 'Tactical Support',
     typeHero: 'Push/Crowd Control',
@@ -1918,7 +1918,7 @@ final heroes = [
   Hero(
     id: "lubu",
     name: "Lu Bu",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703133925049.jpg',
     heroClass: [HeroClass.fighter, HeroClass.tank],
     typeHeroClass: 'Heavy Fighter',
     typeHero: 'Cleanup',
@@ -1947,7 +1947,7 @@ final heroes = [
   Hero(
     id: "luara",
     name: "Luara",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240612/17181825662103.jpg',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'DPS Marksman',
     typeHero: 'Carry/Traverse Terrain',
@@ -1976,7 +1976,7 @@ final heroes = [
   Hero(
     id: "lubanno7",
     name: "Luban No.7",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703128161020.jpg',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'DPS Marksman',
     typeHero: 'Ranged Harass',
@@ -2005,7 +2005,7 @@ final heroes = [
   Hero(
     id: "luna",
     name: "Luna",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230816/16921530652873.jpg',
     heroClass: [HeroClass.fighter, HeroClass.mage],
     typeHeroClass: 'Charger',
     typeHero: 'Gap-Close/Cleanup',
@@ -2034,7 +2034,7 @@ final heroes = [
   Hero(
     id: "maishiranui",
     name: "Mai Shiranui",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230316/16789568698457.jpeg',
     heroClass: [HeroClass.assassin, HeroClass.mage],
     typeHeroClass: 'Ambush Mage',
     typeHero: 'Burst/Gap-Close',
@@ -2063,7 +2063,7 @@ final heroes = [
   Hero(
     id: "marcopolo",
     name: "Marco Polo",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703138149203.jpg',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'Nimble Marksman',
     typeHero: 'Ranged Harass',
@@ -2092,7 +2092,7 @@ final heroes = [
   Hero(
     id: "mayene",
     name: "Mayene",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230627/16878548857586.jpg',
     heroClass: [HeroClass.fighter],
     typeHeroClass: 'Charger',
     typeHero: 'Gap-Close/Crowd Control',
@@ -2121,7 +2121,7 @@ final heroes = [
   Hero(
     id: "mengya",
     name: "Meng Ya",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240926/17273418482275.jpg',
     heroClass: [HeroClass.marksman],
     typeHeroClass: 'DPS Marksman',
     typeHero: 'Ranged Harass',
@@ -2150,7 +2150,7 @@ final heroes = [
   Hero(
     id: "menki",
     name: "Menki",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230406/16807654443439.jpg',
     heroClass: [HeroClass.fighter, HeroClass.mage],
     typeHeroClass: 'Formation Mage',
     typeHero: 'Solo/Gap-Close',
@@ -2179,7 +2179,7 @@ final heroes = [
   Hero(
     id: "miyue",
     name: "Mi Yue",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20241106/17308812684662.jpg',
     heroClass: [HeroClass.mage, HeroClass.fighter],
     typeHeroClass: 'Formation Mage',
     typeHero: 'Sustained Damage/Recovery',
@@ -2208,7 +2208,7 @@ final heroes = [
   Hero(
     id: "milady",
     name: "Milady",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703172302851.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Formation Mage',
     typeHero: 'Sustained Damage/Pushing',
@@ -2237,7 +2237,7 @@ final heroes = [
   Hero(
     id: "ming",
     name: "Ming",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230719/16897556107282.jpeg',
     heroClass: [HeroClass.support],
     typeHeroClass: 'Buff Support',
     typeHero: 'Team Buffs',
@@ -2266,7 +2266,7 @@ final heroes = [
   Hero(
     id: "mozi",
     name: "Mozi",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703126271360.jpg',
     heroClass: [HeroClass.mage, HeroClass.fighter],
     typeHeroClass: 'Control Mage',
     typeHero: 'Crowd Control/Shield',
@@ -2295,7 +2295,7 @@ final heroes = [
   Hero(
     id: "mulan",
     name: "Mulan",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703150175496.jpg',
     heroClass: [HeroClass.fighter, HeroClass.assassin],
     typeHeroClass: 'Assassin Fighter',
     typeHero: 'Gap-Close/Cleanup',
@@ -2324,7 +2324,7 @@ final heroes = [
   Hero(
     id: "musashi",
     name: "Musashi",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703136497048.jpg',
     heroClass: [HeroClass.fighter, HeroClass.assassin],
     typeHeroClass: 'Assassin Fighter',
     typeHero: 'Gap-Close/Cleanup',
@@ -2353,7 +2353,7 @@ final heroes = [
   Hero(
     id: "nakoruru",
     name: "Nakoruru",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230324/16796410514620.jpg',
     heroClass: [HeroClass.assassin],
     typeHeroClass: 'Burst Assassin',
     typeHero: 'Gap-Close',
@@ -2382,7 +2382,7 @@ final heroes = [
   Hero(
     id: "nezha",
     name: "Nezha",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240529/17169519948178.jpeg',
     heroClass: [HeroClass.fighter, HeroClass.tank],
     typeHeroClass: 'Charger',
     typeHero: 'Gap-Close/Damage Absorption',
@@ -2411,7 +2411,7 @@ final heroes = [
   Hero(
     id: "nuwa",
     name: "Nuwa",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703161648320.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Artillery Mage',
     typeHero: 'Poke/Teleport',
@@ -2440,7 +2440,7 @@ final heroes = [
   Hero(
     id: "pei",
     name: "Pei",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703171204802.jpg',
     heroClass: [HeroClass.assassin],
     typeHeroClass: 'Roving Assassin',
     typeHero: 'Ranged Harass/Cleanup',
@@ -2469,7 +2469,7 @@ final heroes = [
   Hero(
     id: "sakeer",
     name: "Sakeer",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20250116/17370078545570.jpg',
     heroClass: [HeroClass.support, HeroClass.mage],
     typeHeroClass: 'Buff Support',
     typeHero: 'Crowd Control/Team Buffs',
@@ -2498,7 +2498,7 @@ final heroes = [
   Hero(
     id: "shangguan",
     name: "Shangguan",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240220/17084011794453.jpg',
     heroClass: [HeroClass.mage, HeroClass.assassin],
     typeHeroClass: 'Ambush Mage',
     typeHero: 'Burst/Gap-Close',
@@ -2527,7 +2527,7 @@ final heroes = [
   Hero(
     id: "shi",
     name: "Shi",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20241023/17296715275229.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Control Mage',
     typeHero: 'Crowd Control/Distance Increases Damage',
@@ -2556,7 +2556,7 @@ final heroes = [
   Hero(
     id: "shoyue",
     name: "Shoyue",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230726/16903645266838.jpg',
     heroClass: [HeroClass.marksman, HeroClass.assassin],
     typeHeroClass: 'Artillery Marksman',
     typeHero: 'Ranged Harass',
@@ -2585,7 +2585,7 @@ final heroes = [
   Hero(
     id: "simayi",
     name: "Sima Yi",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20231026/16982922886953.jpeg',
     heroClass: [HeroClass.assassin, HeroClass.mage],
     typeHeroClass: 'Burst Assassin',
     typeHero: 'Gap-Close',
@@ -2614,7 +2614,7 @@ final heroes = [
   Hero(
     id: "sunbin",
     name: "Sun Bin",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703132847422.jpg',
     heroClass: [HeroClass.support, HeroClass.mage],
     typeHeroClass: 'Tactical Support',
     typeHero: 'Crowd Control/Team Buffs',
@@ -2643,7 +2643,7 @@ final heroes = [
   Hero(
     id: "sunce",
     name: "Sun Ce",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703178244653.jpg',
     heroClass: [HeroClass.fighter, HeroClass.tank],
     typeHeroClass: 'Charger',
     typeHero: 'Crowd Control/Initiate',
@@ -2672,7 +2672,7 @@ final heroes = [
   Hero(
     id: "ukyotachibana",
     name: "Ukyo Tachibana",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230512/16838863039745.jpg',
     heroClass: [HeroClass.assassin, HeroClass.fighter],
     typeHeroClass: 'Assassin Fighter',
     typeHero: 'Gap-Close/Recovery',
@@ -2701,7 +2701,7 @@ final heroes = [
   Hero(
     id: "umbrosa",
     name: "Umbrosa",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20250801/17540350014771.jpg',
     heroClass: [HeroClass.fighter],
     typeHeroClass: 'Charger',
     typeHero: 'Sustained Damage/Resurrect',
@@ -2730,7 +2730,7 @@ final heroes = [
   Hero(
     id: "wangzhaojun",
     name: "Wang Zhaojun",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703147254861.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Crowd Control Mage',
     typeHero: 'Crowd Control/Frozen',
@@ -2759,7 +2759,7 @@ final heroes = [
   Hero(
     id: "wukong",
     name: "Wukong",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703154655863.jpg',
     heroClass: [HeroClass.assassin],
     typeHeroClass: 'Burst Assassin',
     typeHero: 'Gap-Close/Crowd Control',
@@ -2788,7 +2788,7 @@ final heroes = [
   Hero(
     id: "wuyan",
     name: "Wuyan",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703132162087.jpg',
     heroClass: [HeroClass.fighter, HeroClass.tank],
     typeHeroClass: 'Heavy Fighter',
     typeHero: 'Crowd Control/Gap-Close',
@@ -2817,7 +2817,7 @@ final heroes = [
   Hero(
     id: "xiangyu",
     name: "Xiang Yu",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703141357032.jpg',
     heroClass: [HeroClass.tank, HeroClass.fighter],
     typeHeroClass: 'Guardian Tank',
     typeHero: 'Crowd Control/Tank',
@@ -2846,7 +2846,7 @@ final heroes = [
   Hero(
     id: "xiaoqiao",
     name: "Xiao Qiao",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230217/16766162404336.png',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Artillery Mage',
     typeHero: 'Poke/Group Damage',
@@ -2875,7 +2875,7 @@ final heroes = [
   Hero(
     id: "xuance",
     name: "Xuance",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20241212/17339857737156.jpg',
     heroClass: [HeroClass.assassin],
     typeHeroClass: 'Roving Assassin',
     typeHero: 'Gap-Close/Cleanup',
@@ -2904,7 +2904,7 @@ final heroes = [
   Hero(
     id: "yangjian",
     name: "Yang jian",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20230203/16754188047634.jpg',
     heroClass: [HeroClass.fighter],
     typeHeroClass: 'Assassin Fighter',
     typeHero: 'Gap-Close/Cleanup',
@@ -2933,7 +2933,7 @@ final heroes = [
   Hero(
     id: "yango",
     name: "Yango",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20260129/17696842316548.jpg',
     heroClass: [HeroClass.assassin],
     typeHeroClass: 'Roving Assassin',
     typeHero: 'Initiate',
@@ -2962,7 +2962,7 @@ final heroes = [
   Hero(
     id: "yao",
     name: "Yao",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240627/17194737011161.jpeg',
     heroClass: [HeroClass.fighter, HeroClass.assassin],
     typeHeroClass: 'Assassin Fighter',
     typeHero: '',
@@ -2991,7 +2991,7 @@ final heroes = [
   Hero(
     id: "yaria",
     name: "Yaria",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703176615337.jpg',
     heroClass: [HeroClass.support],
     typeHeroClass: 'Buff Support',
     typeHero: 'Team Buffs',
@@ -3020,7 +3020,7 @@ final heroes = [
   Hero(
     id: "ying",
     name: "Ying",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703119253787.jpg',
     heroClass: [HeroClass.fighter, HeroClass.assassin],
     typeHeroClass: 'Assassin Fighter',
     typeHero: 'Gap-Close/Flexible',
@@ -3049,7 +3049,7 @@ final heroes = [
   Hero(
     id: "yixing",
     name: "Yixing",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20241127/17326904276919.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Formation Mage',
     typeHero: 'Poke/Crowd Control',
@@ -3078,7 +3078,7 @@ final heroes = [
   Hero(
     id: "yuhuan",
     name: "Yuhuan",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240430/17144422913129.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Formation Mage',
     typeHero: 'Sustained Damage/Heal',
@@ -3107,7 +3107,7 @@ final heroes = [
   Hero(
     id: "zhangfei",
     name: "Zhang Fei",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703157465676.jpg',
     heroClass: [HeroClass.support, HeroClass.tank],
     typeHeroClass: 'Defensive Support',
     typeHero: 'Crowd Control/Team Buffs',
@@ -3136,7 +3136,7 @@ final heroes = [
   Hero(
     id: "zhouyu",
     name: "Zhou Yu",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703134708376.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Formation Mage',
     typeHero: 'Sustained Damage/Pushing',
@@ -3165,7 +3165,7 @@ final heroes = [
   Hero(
     id: "zhuangzi",
     name: "Zhuangzi",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703128797542.jpg',
     heroClass: [HeroClass.support, HeroClass.tank],
     typeHeroClass: 'Defensive Support',
     typeHero: 'Team Buffs',
@@ -3194,7 +3194,7 @@ final heroes = [
   Hero(
     id: "zilong",
     name: "Zilong",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20221206/16703121309130.jpg',
     heroClass: [HeroClass.fighter],
     typeHeroClass: 'Assassin Fighter',
     typeHero: 'Gap-Close',
@@ -3223,7 +3223,7 @@ final heroes = [
   Hero(
     id: "ziya",
     name: "Ziya",
-    imageAsset: '',
+    imageAsset: 'https://world.honorofkings.com/zlkdatasys/images/image/20240808/17231072409686.jpg',
     heroClass: [HeroClass.mage],
     typeHeroClass: 'Artillery Mage',
     typeHero: 'Poke/Team Buffs',
