@@ -7,6 +7,10 @@ enum GolemDependencyLevel { notDependent, slightlyDependent, highlyDependent }
 enum PeakPeriod { early, mid, late, balanced }
 enum Difficulty { easy, medium, hard, veryHard }
 enum AttackRange { melee, ranged }
+enum SkillType { passive, active }
+enum AbilityType { release, enhance, summon, speedUp, immunity, crowdControl }
+enum DamageType { physical, magical, trueDamage }
+enum SkinRarity { classic, common, rare, epic, legend, mythic, flawless }
 
 class GolemDependency {
   final GolemType type;
@@ -39,6 +43,8 @@ class GolemDependency {
 class Hero {
   final String id;
   final String name;
+  final String nameCn;
+  final String title;
   final String imageAsset; // path ke asset gambar
   final List<HeroClass> heroClass;
   final String subHeroClass; // bebas string
@@ -48,20 +54,27 @@ class Hero {
   final GolemDependency golemDependency;
   final PeakPeriod peakPeriods;
   final Difficulty difficulty;
+  final List<Skill> skills;
+  final int survivalPercentage;
+  final int attackPercentage;
+  final int abilityPercentage;
+  final int difficultyPercentage;
 
   // Stats
   final BasicStats basic;
   final OffensiveStats offensive;
   final DefensiveStats defensive;
 
-  // Untuk logika counter/synergy (bisa pakai tipe hero atau atribut)
-  final List<String> strongAgainst; // daftar id hero yang dikounter
-  final List<String> weakAgainst;   // daftar id hero yang mengcounter dirinya
-  final List<String> synergies;     // id hero yang synergy bagus
+  final List<Skin> skins;
+  final Map<String, Partner> bestPartners;
+  final Map<String, Partner> suppressingHeroes;
+  final Map<String, Partner> suppressedHeroes;
 
   Hero({
     required this.id,
     required this.name,
+    required this.nameCn,
+    required this.title,
     required this.imageAsset,
     required this.heroClass,
     required this.subHeroClass,
@@ -71,12 +84,18 @@ class Hero {
     required this.golemDependency,
     required this.peakPeriods,
     required this.difficulty,
+    required this.skills,
+    required this.survivalPercentage,
+    required this.attackPercentage,
+    required this.abilityPercentage,
+    required this.difficultyPercentage,
     required this.basic,
     required this.offensive,
     required this.defensive,
-    this.strongAgainst = const [],
-    this.weakAgainst = const [],
-    this.synergies = const [],
+    required this.skins,
+    required this.bestPartners,
+    required this.suppressingHeroes,
+    required this.suppressedHeroes,
   });
 
   // Helper: cek apakah hero memiliki kelas tertentu
@@ -84,6 +103,138 @@ class Hero {
 
   // Helper: ambil string gabungan nama kelas (opsional untuk tampilan)
   String get heroClassString => heroClass.map((e) => e.name).join('/');
+}
+
+class Skill {
+  final String name;
+  final SkillType type;
+  final int skill;
+  final List<AbilityType> abilityType;
+  final DamageType? damage;
+  final List<double> cooldown;
+  final List<int> cost;
+  final String description;
+  final String imageUrl;
+
+  Skill({
+    required this.name,
+    required this.type,
+    required this.skill,
+    required this.abilityType,
+    required this.damage,
+    required this.cooldown,
+    required this.cost,
+    required this.description,
+    required this.imageUrl,
+  });
+}
+
+class Skin {
+  final String name;
+  final SkinRarity rarity;
+  final String imageUrl;
+
+  Skin({required this.name, required this.rarity, required this.imageUrl});
+}
+
+class Partner {
+  final String name;
+  final String thumbnail;
+  final String description;
+
+  Partner({
+    required this.name,
+    required this.thumbnail,
+    required this.description,
+  });
+}
+
+class Item {
+  final String id;
+  final String name;
+  final int type;          // 1=Attack, 2=Magic, 3=Defense, 4=Boots, 5=Jungle, 7=Support
+  final int price;
+  final int totalPrice;
+  final String description1;
+  final String? description2;
+
+  Item({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.price,
+    required this.totalPrice,
+    required this.description1,
+    this.description2,
+  });
+
+  factory Item.fromJson(Map<String, dynamic> json, {required String id}) {
+    return Item(
+      id: id,
+      name: json['item_name'] as String,
+      type: json['item_type'] as int,
+      price: json['price'] as int,
+      totalPrice: json['total_price'] as int,
+      description1: json['des1'] as String,
+      description2: json['des2'] as String?,
+    );
+  }
+
+  String get imageUrl =>
+      'https://game.gtimg.cn/images/yxzj/img201606/item/${id}.png';
+}
+
+class Spell {
+  final String id;
+  final String name;
+  final String rank;
+  final String description;
+
+  Spell({
+    required this.id,
+    required this.name,
+    required this.rank,
+    required this.description,
+  });
+
+  factory Spell.fromJson(Map<String, dynamic> json, {required String id}) {
+    return Spell(
+      id: id,
+      name: json['summoner_name'] as String,
+      rank: json['summoner_rank'] as String,
+      description: json['summoner_description'] as String,
+    );
+  }
+
+  String get imageUrl => 'https://game.gtimg.cn/images/yxzj/img201606/summoner/${id}.png';
+}
+
+class Emblem {
+  final String id;
+  final String name;
+  final String type;  // red, yellow, blue
+  final int grade;
+  final String description;
+
+  Emblem({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.grade,
+    required this.description,
+  });
+
+  factory Emblem.fromJson(Map<String, dynamic> json, {required String id}) {
+    return Emblem(
+      id: id,
+      name: json['ming_name'] as String,
+      type: json['ming_type'] as String,
+      grade: json['ming_grade'] as int,
+      description: json['ming_des'] as String,
+    );
+  }
+
+  String get imageUrl => 'https://game.gtimg.cn/images/yxzj/img201606/mingwen/${id}.png';
 }
 
 class BasicStats {
