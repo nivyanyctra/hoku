@@ -1,7 +1,7 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
-import 'screens/auth/login_screen.dart';
-// import 'screens/main_navigation.dart';
+import '../screens/auth/login_screen.dart';
+// import '../screens/main_navigation.dart';
 
 void main() => runApp(HokuApp());
 
