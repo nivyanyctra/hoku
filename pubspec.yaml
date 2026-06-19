@@ -7,6 +7,7 @@ environment:
   sdk: ^3.11.1
 
 dependencies:
+  add_2_calendar: ^3.1.1
   curved_navigation_bar: ^1.0.6
   flutter:
     sdk: flutter
