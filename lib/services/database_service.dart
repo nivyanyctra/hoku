@@ -64,12 +64,19 @@ class DatabaseService {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS careers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        creator_id INTEGER,
-        role TEXT,
-        team TEXT,
-        location TEXT,
-        salary TEXT,
-        requirements TEXT,
+        creator_id INTEGER, 
+        team_name TEXT, 
+        role TEXT, 
+        lane TEXT,
+        type TEXT, 
+        salary TEXT, 
+        currency TEXT, 
+        location_type TEXT, 
+        city TEXT, 
+        country TEXT,
+        requirements TEXT, 
+        apply_link TEXT, 
+        deadline TEXT, 
         created_at TEXT,
         FOREIGN KEY (creator_id) REFERENCES users (id) ON DELETE CASCADE
       )

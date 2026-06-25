@@ -156,13 +156,19 @@ class _LeaguesPageState extends State<LeaguesPage> {
           ? const Center(
               child: CircularProgressIndicator(color: Color(0xFFC9A227)),
             )
-          : _filteredMatches.isEmpty
-          ? _buildEmptyState()
-          : ListView.builder(
-              padding: const EdgeInsets.all(12),
-              itemCount: _filteredMatches.length,
-              itemBuilder: (context, index) =>
-                  _buildMatchCard(_filteredMatches[index]),
+          : RefreshIndicator(
+              onRefresh: () async {
+                await _api.fetchMatches().then(
+                  (data) => setState(() => _allMatches = data),
+                );
+                _applyFilters();
+              },
+              child: ListView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: _filteredMatches.length,
+                itemBuilder: (context, index) =>
+                    _buildMatchCard(_filteredMatches[index]),
+              ),
             ),
     );
   }

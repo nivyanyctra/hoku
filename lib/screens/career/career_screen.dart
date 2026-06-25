@@ -1,67 +1,90 @@
 import 'package:flutter/material.dart';
+import '../../models/career_model.dart';
 import '../../services/database_service.dart';
-import '../../models/user_model.dart';
-import 'package:intl/intl.dart';
+import 'add_edit_career_screen.dart';
+import 'career_detail_screen.dart';
+import '../../utils/currency_utils.dart';
 
 class CareerPage extends StatefulWidget {
+  const CareerPage({super.key});
+
   @override
-  _CareerPageState createState() => _CareerPageState();
+  State<CareerPage> createState() => _CareerPageState();
 }
 
 class _CareerPageState extends State<CareerPage> {
-  List<Map<String, dynamic>> _allJobs = [];
-  List<Map<String, dynamic>> _filteredJobs = [];
-  final _searchCtrl = TextEditingController();
+  List<CareerModel> _allJobs = [];
+  List<CareerModel> _filteredJobs = [];
+  bool _isLoading = true;
+  String _searchQuery = "";
 
   @override
   void initState() {
     super.initState();
-    _loadJobs();
+    _refresh();
   }
 
-  void _loadJobs() async {
+  Future<void> _refresh() async {
+    setState(() => _isLoading = true);
     final data = await DatabaseService.instance.getCareers();
-    setState(() {
-      _allJobs = data;
-      _filteredJobs = data;
-    });
+    if (mounted) {
+      setState(() {
+        _allJobs = data.map((e) => CareerModel.fromMap(e)).toList();
+        _applyFilters();
+        _isLoading = false;
+      });
+    }
   }
 
-  void _filter(String val) {
+  void _applyFilters() {
     setState(() {
-      _filteredJobs = _allJobs
-          .where(
-            (j) =>
-                j['role'].toLowerCase().contains(val.toLowerCase()) ||
-                j['team'].toLowerCase().contains(val.toLowerCase()),
-          )
-          .toList();
+      _filteredJobs = _allJobs.where((j) {
+        return j.teamName.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+            j.role.toLowerCase().contains(_searchQuery.toLowerCase());
+      }).toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF0A0E14),
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: const Text(
-          "CAREER",
+          "HOKU CAREER",
           style: TextStyle(
             color: Color(0xFFC9A227),
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          // TOMBOL TAMBAH SEKARANG DI SINI (SEBELAH FILTER)
+          IconButton(
+            icon: const Icon(Icons.add_box_outlined, color: Color(0xFFC9A227)),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AddEditCareerScreen()),
+            ).then((_) => _refresh()),
+          ),
+          IconButton(
+            icon: const Icon(Icons.filter_list, color: Colors.white),
+            onPressed: () {}, // Panggil Filter Sheet jika perlu
+          ),
+        ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(56),
+          preferredSize: const Size.fromHeight(60),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: TextField(
-              controller: _searchCtrl,
-              onChanged: _filter,
+              onChanged: (v) {
+                _searchQuery = v;
+                _applyFilters();
+              },
               style: const TextStyle(color: Colors.white, fontSize: 13),
               decoration: InputDecoration(
-                hintText: "Search team...",
+                hintText: "Search team or positions...",
                 prefixIcon: const Icon(
                   Icons.search,
                   color: Colors.white24,
@@ -79,176 +102,110 @@ class _CareerPageState extends State<CareerPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFFC9A227),
-        child: Icon(Icons.add, color: Colors.black),
-        onPressed: () => _showJobForm(),
-      ),
-      body: ListView.builder(
-        padding: EdgeInsets.all(16),
-        itemCount: _filteredJobs.length,
-        itemBuilder: (context, index) {
-          final job = _filteredJobs[index];
-          bool isOwner = job['creator_id'] == AuthService.currentUser?.id;
-
-          return Card(
-            margin: EdgeInsets.only(bottom: 15),
-            color: Color(0xFF161B22),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: BorderSide(color: Colors.white10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Color(0xFFC9A227),
-                        child: Text(
-                          job['team'][0],
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                      SizedBox(width: 15),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              job['role'],
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              job['team'],
-                              style: TextStyle(color: Color(0xFFC9A227)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (isOwner) ...[
-                        IconButton(
-                          icon: Icon(Icons.edit, color: Colors.blue, size: 20),
-                          onPressed: () => _showJobForm(job: job),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red, size: 20),
-                          onPressed: () => _deleteJob(job['id']),
-                        ),
-                      ] else
-                        Icon(Icons.bookmark_border, color: Colors.white54),
-                    ],
-                  ),
-                  SizedBox(height: 15),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.payments_outlined,
-                        size: 16,
-                        color: Colors.green,
-                      ),
-                      SizedBox(width: 5),
-                      Text(job['salary'], style: TextStyle(fontSize: 13)),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    "Requirements: ${job['requirements']}",
-                    style: TextStyle(fontSize: 13, color: Colors.white54),
-                  ),
-                  SizedBox(height: 15),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: isOwner ? null : () {},
-                          child: Text(isOwner ? "MANAGE POST" : "Quick Apply"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: isOwner
-                                ? Colors.grey
-                                : Colors.blueAccent,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      OutlinedButton(onPressed: () {}, child: Text("Details")),
-                    ],
-                  ),
-                ],
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        color: const Color(0xFFC9A227),
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: _filteredJobs.length,
+                itemBuilder: (context, i) => _buildJobCard(_filteredJobs[i]),
               ),
-            ),
-          );
-        },
       ),
     );
   }
 
-  void _showJobForm({Map<String, dynamic>? job}) {
-    final roleCtrl = TextEditingController(text: job?['role']);
-    final teamCtrl = TextEditingController(text: job?['team']);
-    final reqCtrl = TextEditingController(text: job?['requirements']);
+  // Di dalam ListView.builder NetworkingPage -> _buildJobCard
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(job == null ? "Post New Career" : "Edit Career"),
-        content: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextField(
-                controller: roleCtrl,
-                decoration: InputDecoration(labelText: "Role (e.g. Jungler)"),
-              ),
-              TextField(
-                controller: teamCtrl,
-                decoration: InputDecoration(labelText: "Team Name"),
-              ),
-              TextField(
-                controller: reqCtrl,
-                decoration: InputDecoration(labelText: "Requirements"),
-              ),
-            ],
+  Widget _buildJobCard(CareerModel job) {
+    // FORMAT GAJI DISINI
+    String formattedSalary = CurrencyHelper.formatDisplay(
+      job.salary,
+      job.currency,
+    );
+
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => CareerDetailScreen(job: job)),
+      ),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFF161B22),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: job.type == "Professional"
+                ? Colors.amber.withOpacity(0.2)
+                : Colors.white10,
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final data = {
-                'creator_id': AuthService.currentUser?.id,
-                'role': roleCtrl.text,
-                'team': teamCtrl.text,
-                'requirements': reqCtrl.text,
-                'location': 'Jakarta, ID',
-                'salary': 'Competitive',
-                'created_at': DateFormat('dd MMM yyyy').format(DateTime.now()),
-              };
-
-              if (job == null) {
-                await DatabaseService.instance.insertCareer(data);
-              } else {
-                await DatabaseService.instance.updateCareer(job['id'], data);
-              }
-              Navigator.pop(context);
-              _loadJobs();
-            },
-            child: Text("Save"),
-          ),
-        ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: const Color(0xFFC9A227),
+                  child: Text(
+                    job.teamName[0],
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        job.role,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        job.teamName,
+                        style: const TextStyle(
+                          color: Color(0xFFC9A227),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _info(Icons.location_on, "${job.city}, ${job.country}"),
+                _info(Icons.payments, formattedSalary), // Gaji terformat
+                _info(Icons.work, job.locationType),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  void _deleteJob(int id) async {
-    await DatabaseService.instance.deleteCareer(id);
-    _loadJobs();
-  }
+  Widget _info(IconData i, String t) => Row(
+    children: [
+      Icon(i, size: 14, color: Colors.white38),
+      const SizedBox(width: 4),
+      Text(t, style: const TextStyle(fontSize: 11, color: Colors.white70)),
+    ],
+  );
+
+  Widget _miniInfo(IconData i, String t) => Row(
+    children: [
+      Icon(i, size: 14, color: Colors.white38),
+      const SizedBox(width: 4),
+      Text(t, style: const TextStyle(fontSize: 11, color: Colors.white70)),
+    ],
+  );
 }
