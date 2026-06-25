@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class UserModel {
   final int? id;
   final String email;
@@ -40,4 +42,11 @@ class UserModel {
 
 class AuthService {
   static UserModel? currentUser;
+  // Sinyal global agar layar lain tahu profil berubah
+  static ValueNotifier<UserModel?> userNotifier = ValueNotifier(null);
+
+  static void updateSession(UserModel user) {
+    currentUser = user;
+    userNotifier.value = user; // Memicu update di layar yang mendengarkan
+  }
 }

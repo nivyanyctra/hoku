@@ -172,21 +172,23 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 await _db.updateProfile(AuthService.currentUser!.id!, data);
 
-                // 4. Update Global State agar UI berubah seketika
-                setState(() {
-                  AuthService.currentUser = UserModel(
+                // UPDATE SESSION GLOBAL
+                AuthService.updateSession(
+                  UserModel(
                     id: AuthService.currentUser!.id,
                     email: newEmail,
                     password: AuthService.currentUser!.password,
                     nickname: nickCtrl.text,
                     uid: uidCtrl.text,
                     currentRank: selectedRank,
-                  );
-                });
+                  ),
+                );
 
-                if (!mounted) return;
-                Navigator.pop(ctx);
-                _showMsg("Profile & Email Updated!");
+                Navigator.pop(ctx); // Tutup BottomSheet
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Profile Updated!")),
+                );
+                // _showMsg("Profile & Email Updated!");
               },
               child: const Text(
                 "SAVE CHANGES",

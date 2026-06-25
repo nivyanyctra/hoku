@@ -22,12 +22,19 @@ class CareerDetailScreen extends StatelessWidget {
           if (isOwner) ...[
             IconButton(
               icon: const Icon(Icons.edit, color: Colors.blue),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => AddEditCareerScreen(job: job),
-                ),
-              ),
+              onPressed: () =>
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AddEditCareerScreen(job: job),
+                    ),
+                  ).then((value) {
+                    if (value == true)
+                      Navigator.pop(
+                        context,
+                        true,
+                      ); // Jika diedit, tutup detail & refresh list
+                  }),
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
@@ -172,9 +179,8 @@ class CareerDetailScreen extends StatelessWidget {
             onPressed: () async {
               await DatabaseService.instance.deleteCareer(job.id!);
               Navigator.pop(ctx);
-              Navigator.pop(context);
+              Navigator.pop(context, true); // Sinyal ke List bahwa data dihapus
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: const Text("DELETE"),
           ),
         ],

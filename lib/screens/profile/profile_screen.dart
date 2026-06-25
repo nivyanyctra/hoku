@@ -1,64 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:hoku/models/user_model.dart';
-import 'package:hoku/screens/profile/settings_screen.dart';
+import '../../models/user_model.dart';
+import 'settings_screen.dart';
 
-class ProfilePage extends StatefulWidget {
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  UserModel? user = AuthService.currentUser;
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text(
-          "PROFILE",
-          style: TextStyle(
-            color: Color(0xFFC9A227),
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          IconButton(icon: Icon(Icons.settings), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsPage()))),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeader(),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  _infoCard("Game Stats", [
-                    _infoRow("UID", user?.uid ?? "-"),
-                    _infoRow("Current Rank", user?.currentRank ?? "-"),
-                  ]),
-                ],
+    return ValueListenableBuilder(
+      valueListenable: AuthService.userNotifier, // Pantau perubahan data user
+      builder: (context, user, child) {
+        final userData = user ?? AuthService.currentUser;
+
+        return Scaffold(
+          backgroundColor: const Color(0xFF0A0E14),
+          appBar: AppBar(
+            title: const Text("MY PROFILE"),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsPage())),
               ),
-            )
-          ],
-        ),
-      ),
+            ],
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildHeader(userData),
+                _infoCard("Stats", [
+                  _infoRow("UID", userData?.uid ?? ""),
+                  _infoRow("Rank", userData?.currentRank ?? ""),
+                ])
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(UserModel? user) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 30),
-      decoration: BoxDecoration(color: Color(0xFF161B22)),
+      padding: const EdgeInsets.all(30),
+      color: const Color(0xFF161B22),
       child: Column(
         children: [
-          CircleAvatar(radius: 50, backgroundColor: Color(0xFFC9A227), child: Icon(Icons.person, size: 50, color: Colors.black)),
-          SizedBox(height: 15),
-          Text(user?.nickname ?? "Legend", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          Text(user?.email ?? "", style: TextStyle(color: Colors.white38)),
+          const CircleAvatar(radius: 40, backgroundColor: Color(0xFFC9A227), child: Icon(Icons.person, size: 40)),
+          const SizedBox(height: 15),
+          Text(user?.nickname ?? "", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(user?.email ?? "", style: const TextStyle(color: Colors.white38)),
         ],
       ),
     );
@@ -72,9 +63,15 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber)),
+            Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.amber,
+              ),
+            ),
             Divider(),
-            ...children
+            ...children,
           ],
         ),
       ),
@@ -86,7 +83,10 @@ class _ProfilePageState extends State<ProfilePage> {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text(label), Text(val, style: TextStyle(color: Colors.white70))],
+        children: [
+          Text(label),
+          Text(val, style: TextStyle(color: Colors.white70)),
+        ],
       ),
     );
   }

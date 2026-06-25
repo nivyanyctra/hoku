@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
               pinned: true,
               backgroundColor: Colors.black,
               flexibleSpace: FlexibleSpaceBar(
-                background: _buildUserHeader(user),
+                background: _buildHeaderWithNotifier(),
               ),
               title: const Text(
                 "HOKU UNIVERSE",
@@ -139,6 +139,17 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  // Cari widget _buildUserHeader(user) dan bungkus dengan:
+  Widget _buildHeaderWithNotifier() {
+    return ValueListenableBuilder(
+      valueListenable: AuthService.userNotifier,
+      builder: (context, user, child) {
+        final userData = user ?? AuthService.currentUser;
+        return _buildUserHeader(userData); // Gunakan data terbaru
+      },
     );
   }
 

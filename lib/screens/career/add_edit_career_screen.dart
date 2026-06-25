@@ -139,13 +139,13 @@ class _AddEditCareerScreenState extends State<AddEditCareerScreen> {
       if (widget.job == null) {
         await DatabaseService.instance.insertCareer(data.toMap());
       } else {
-        // FIX: Update tidak boleh kirim ID null
         await DatabaseService.instance.updateCareer(
           widget.job!.id!,
           data.toMap(),
         );
       }
-      if (mounted) Navigator.pop(context);
+
+      if (mounted) Navigator.pop(context, true);
     } catch (e) {
       debugPrint("Update Error: $e");
     }
