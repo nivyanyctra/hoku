@@ -81,7 +81,7 @@ class _AcademyPageState extends State<AcademyPage>
           "HOKU DRAFT SIMULATOR",
           style: TextStyle(
             color: Color(0xFFC9A227),
-            fontSize: 13,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
         ),

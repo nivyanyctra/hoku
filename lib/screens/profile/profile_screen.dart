@@ -1,32 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:hoku/models/user_model.dart';
+import 'package:hoku/screens/profile/settings_screen.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  UserModel? user = AuthService.currentUser;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0D1117),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text(
+          "PROFILE",
+          style: TextStyle(
+            color: Color(0xFFC9A227),
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          IconButton(icon: Icon(Icons.settings), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsPage()))),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             _buildHeader(),
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(20),
               child: Column(
                 children: [
-                  _statTile("Current Rank", "Grandmaster", Icons.trending_up),
-                  _statTile(
-                    "Highest Rank",
-                    "Mythic 54 Stars",
-                    Icons.workspace_premium,
-                  ),
-                  _statTile("Peak Points", "2,150", Icons.speed),
-                  Divider(color: Colors.white24),
-                  _buildHeroSection(),
+                  _infoCard("Game Stats", [
+                    _infoRow("UID", user?.uid ?? "-"),
+                    _infoRow("Current Rank", user?.currentRank ?? "-"),
+                  ]),
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -35,67 +50,44 @@ class ProfilePage extends StatelessWidget {
 
   Widget _buildHeader() {
     return Container(
-      height: 250,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFFC9A227).withValues(alpha: 0.4), Color(0xFF0D1117)],
-        ),
-      ),
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 30),
+      decoration: BoxDecoration(color: Color(0xFF161B22)),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
-            radius: 50,
-            backgroundColor: Colors.white10,
-            child: Icon(Icons.person, size: 50),
-          ),
-          SizedBox(height: 10),
-          Text(
-            "HOKU_ProPlayer",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ),
-          Text("UID: 982310221", style: TextStyle(color: Colors.white70)),
+          CircleAvatar(radius: 50, backgroundColor: Color(0xFFC9A227), child: Icon(Icons.person, size: 50, color: Colors.black)),
+          SizedBox(height: 15),
+          Text(user?.nickname ?? "Legend", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          Text(user?.email ?? "", style: TextStyle(color: Colors.white38)),
         ],
       ),
     );
   }
 
-  Widget _statTile(String label, String value, IconData icon) {
-    return ListTile(
-      leading: Icon(icon, color: Color(0xFFC9A227)),
-      title: Text(label),
-      trailing: Text(
-        value,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+  Widget _infoCard(String title, List<Widget> children) {
+    return Card(
+      color: Color(0xFF161B22),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber)),
+            Divider(),
+            ...children
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildHeroSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Favorite Heroes",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 10),
-        Row(
-          children: List.generate(
-            3,
-            (i) => Expanded(
-              child: Card(
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Center(child: Text("Hero $i")),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+  Widget _infoRow(String label, String val) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [Text(label), Text(val, style: TextStyle(color: Colors.white70))],
+      ),
     );
   }
 }

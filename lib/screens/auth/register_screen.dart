@@ -1,185 +1,191 @@
 import 'package:flutter/material.dart';
+import '../../services/database_service.dart';
+import '../../models/user_model.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
-
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final PageController _pageController = PageController();
   int _currentStep = 0;
 
-  void _handleBack() {
-    if (_currentStep > 0) {
-      _pageController.previousPage(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+  // Controllers
+  final _emailCtrl = TextEditingController();
+  final _passCtrl = TextEditingController();
+  final _nickCtrl = TextEditingController();
+  final _uidCtrl = TextEditingController();
+  String _selectedRank = "Bronze";
+
+  void _nextStep() async {
+    // Validasi Step 0: Email & Pass
+    if (_currentStep == 0) {
+      if (_emailCtrl.text.isEmpty || _passCtrl.text.isEmpty) {
+        _showError("Email dan Password wajib diisi");
+        return;
+      }
+      if (!_emailCtrl.text.contains("@")) {
+        _showError("Format email tidak valid");
+        return;
+      }
+    }
+    
+    // Validasi Step 1: Nickname & UID
+    if (_currentStep == 1) {
+      if (_nickCtrl.text.isEmpty || _uidCtrl.text.isEmpty) {
+        _showError("Nickname dan UID wajib diisi");
+        return;
+      }
+      
+      // CEK UNIQUE ke Database
+      final error = await DatabaseService.instance.checkUniqueness(
+        _emailCtrl.text.trim(), 
+        _nickCtrl.text.trim(), 
+        _uidCtrl.text.trim()
       );
-      setState(() => _currentStep--);
+      
+      if (error != null) {
+        _showError(error);
+        return;
+      }
+    }
+
+    if (_currentStep < 2) {
+      _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.ease);
+      setState(() => _currentStep++);
     } else {
-      Navigator.pop(context);
+      _finishRegister();
     }
   }
 
-  void _handleNext() {
-    if (_currentStep < 2) {
-      _pageController.nextPage(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      setState(() => _currentStep++);
-    } else {
-      // Navigasi ke halaman utama setelah register selesai
-      Navigator.pop(context);
-    }
+  void _finishRegister() async {
+    final newUser = UserModel(
+      email: _emailCtrl.text.trim(),
+      password: _passCtrl.text,
+      nickname: _nickCtrl.text.trim(),
+      uid: _uidCtrl.text.trim(),
+      currentRank: _selectedRank,
+    );
+
+    await DatabaseService.instance.registerUser(newUser);
+    _showSuccess("Registrasi Berhasil! Silakan Login.");
+    Navigator.pop(context);
+  }
+
+  void _showError(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), backgroundColor: Colors.red));
+  }
+
+  void _showSuccess(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), backgroundColor: Colors.green));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0D1117), // Dark Background
+      backgroundColor: Color(0xFF0D1117),
       body: SafeArea(
         child: Column(
           children: [
-            // 1. Bagian Atas: Indikator (Opsional, agar user tahu progressnya)
             SizedBox(height: 20),
-            _buildStepIndicator(),
-
-            // 2. Bagian Tengah (CENTERED CONTENT): Title & Form
+            _buildIndicator(),
             Expanded(
               child: PageView(
                 controller: _pageController,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
-                  _buildFormPage(
-                    title: "CREATING ACCOUNT",
-                    subtitle: "Enter your credentials to join HOKU",
-                    children: [
-                      _buildTextField("Email Address", Icons.alternate_email),
-                      _buildTextField(
-                        "Password",
-                        Icons.lock_outline,
-                        obscure: true,
-                      ),
-                      _buildTextField(
-                        "Confirm Password",
-                        Icons.lock_reset,
-                        obscure: true,
-                      ),
-                    ],
-                  ),
-                  _buildFormPage(
-                    title: "PLAYER IDENTITY",
-                    subtitle: "This will be shown on your profile",
-                    children: [
-                      _buildTextField(
-                        "In-game Nickname",
-                        Icons.person_pin_outlined,
-                      ),
-                      _buildTextField("UID In-game", Icons.badge_outlined),
-                    ],
-                  ),
-                  _buildFormPage(
-                    title: "RANK & SKILLS",
-                    subtitle: "Help us find the right team for you",
-                    children: [
-                      _buildDropdownField("Current Rank"),
-                      _buildTextField("Highest Peak Points", Icons.show_chart),
-                    ],
-                  ),
+                  _buildStep("ACCOUNT", [
+                    _inputField(_emailCtrl, "Email Address", Icons.email),
+                    _inputField(_passCtrl, "Password", Icons.lock, obscure: true),
+                  ]),
+                  _buildStep("IDENTITY", [
+                    _inputField(_nickCtrl, "In-Game Nickname", Icons.person),
+                    _inputField(_uidCtrl, "Game UID", Icons.fingerprint),
+                  ]),
+                  _buildStep("RANK", [
+                    _buildRankDropdown(),
+                  ]),
                 ],
               ),
             ),
-
-            // 3. Bagian Bawah (BOTTOM/END): Tombol Navigasi
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Row(
-                children: [
-                  // Tombol Back
-                  Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        side: BorderSide(color: Colors.white24),
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: _handleBack,
-                      child: Text(
-                        "BACK",
-                        style: TextStyle(
-                          color: Colors.white54,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  // Tombol Next/Finish
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFC9A227), // Gold
-                        foregroundColor: Colors.black,
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 0,
-                      ),
-                      onPressed: _handleNext,
-                      child: Text(
-                        _currentStep == 2 ? "GET STARTED" : "NEXT STEP",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _buildNavButtons(),
           ],
         ),
       ),
     );
   }
 
-  // Widget Helper untuk halaman form yang kontennya di tengah
-  Widget _buildFormPage({
-    required String title,
-    required String subtitle,
-    required List<Widget> children,
-  }) {
-    return Container(
+  Widget _buildStep(String title, List<Widget> children) {
+    return Padding(
       padding: EdgeInsets.symmetric(horizontal: 40),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center, // INI YANG MEMBUAT TENGAH
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color(0xFFC9A227),
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2,
+          Text(title, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFFC9A227))),
+          SizedBox(height: 30),
+          ...children,
+        ],
+      ),
+    );
+  }
+
+  Widget _inputField(TextEditingController ctrl, String hint, IconData icon, {bool obscure = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: TextField(
+        controller: ctrl,
+        obscureText: obscure,
+        textAlign: TextAlign.center,
+        decoration: InputDecoration(
+          hintText: hint,
+          prefixIcon: Icon(icon, color: Color(0xFFC9A227)),
+          filled: true, fillColor: Colors.white.withOpacity(0.05),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRankDropdown() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: DropdownButton<String>(
+        isExpanded: true,
+        value: _selectedRank,
+        dropdownColor: Color(0xFF161B22),
+        items: ["Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grandmaster", "Mythic"]
+            .map((e) => DropdownMenuItem(child: Center(child: Text(e)), value: e)).toList(),
+        onChanged: (v) => setState(() => _selectedRank = v!),
+      ),
+    );
+  }
+
+  Widget _buildNavButtons() {
+    return Padding(
+      padding: EdgeInsets.all(30),
+      child: Row(
+        children: [
+          if (_currentStep > 0)
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () {
+                  _pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.ease);
+                  setState(() => _currentStep--);
+                },
+                child: Text("BACK"),
+              ),
             ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            subtitle,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white38, fontSize: 14),
-          ),
-          SizedBox(height: 40),
-          // Form fields
-          ...children.map(
-            (widget) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: widget,
+          if (_currentStep > 0) SizedBox(width: 10),
+          Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFC9A227)),
+              onPressed: _nextStep,
+              child: Text(_currentStep == 2 ? "FINISH" : "NEXT", style: TextStyle(color: Colors.black)),
             ),
           ),
         ],
@@ -187,89 +193,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildTextField(String hint, IconData icon, {bool obscure = false}) {
-    return TextField(
-      obscureText: obscure,
-      textAlign: TextAlign.center,
-      style: TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: TextStyle(color: Colors.white24, fontSize: 14),
-        prefixIcon: Icon(icon, color: Color(0xFFC9A227), size: 20),
-        filled: true,
-        fillColor: Colors.white.withValues(alpha: 0.03),
-        contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 20),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: Colors.white10),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: Color(0xFFC9A227)),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDropdownField(String hint) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          isExpanded: true,
-          hint: Center(
-            child: Text(
-              hint,
-              style: TextStyle(color: Colors.white24, fontSize: 14),
-            ),
-          ),
-          dropdownColor: Color(0xFF161B22),
-          items:
-              [
-                    "Bronze",
-                    "Silver",
-                    "Gold",
-                    "Platinum",
-                    "Diamond",
-                    "Master",
-                    "Grandmaster",
-                    "Mythic",
-                  ]
-                  .map(
-                    (e) => DropdownMenuItem(
-                      value: e,
-                      child: Center(
-                        child: Text(e, style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                  )
-                  .toList(),
-          onChanged: (val) {},
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStepIndicator() {
+  Widget _buildIndicator() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(3, (index) {
-        return AnimatedContainer(
-          duration: Duration(milliseconds: 300),
-          margin: EdgeInsets.symmetric(horizontal: 4),
-          height: 4,
-          width: index == _currentStep ? 24 : 12,
-          decoration: BoxDecoration(
-            color: index == _currentStep ? Color(0xFFC9A227) : Colors.white10,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        );
-      }),
+      children: List.generate(3, (i) => AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        margin: EdgeInsets.symmetric(horizontal: 4),
+        height: 8, width: _currentStep == i ? 24 : 8,
+        decoration: BoxDecoration(color: _currentStep == i ? Color(0xFFC9A227) : Colors.white24, borderRadius: BorderRadius.circular(4)),
+      )),
     );
   }
 }

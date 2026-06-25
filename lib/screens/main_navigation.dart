@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home/home_screen.dart';
 import 'leagues/leagues_screen.dart';
-import 'circle/circle_screen.dart';
+import 'career/career_screen.dart';
 import 'academy/academy_screen.dart';
 import 'profile/profile_screen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -18,7 +18,7 @@ class _MainNavigationState extends State<MainNavigation> {
   final screens = [
     HomePage(),
     LeaguesPage(),
-    CirclePage(),
+    CareerPage(),
     AcademyPage(),
     ProfilePage(),
   ];
