@@ -33,6 +33,7 @@ flutter:
     - assets/icon/class/
     - assets/icon/lane/
     - assets/database/hoku.db
+    - assets/database/items.json
 
 flutter_launcher_icons:
   android: "launcher_icon"
