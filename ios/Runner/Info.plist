@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Hoku</string>
+	<string>HOKU</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -27,6 +27,10 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
+	<key>NSCalendarsUsageDescription</key>
+	<string>HOKU memerlukan akses kalender untuk mengatur pengingat jadwal pertandingan.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>HOKU memerlukan akses kontak untuk sinkronisasi kalender.</string>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<false/>
