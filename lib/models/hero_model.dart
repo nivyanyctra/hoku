@@ -1,27 +1,43 @@
 import 'dart:convert';
 
 enum HeroClass { marksman, mage, assassin, fighter, tank, support }
-enum TipeHeroClass { deftMarksman, burstMage, assassinJungler, etc } // contoh sederhana
+
+enum TipeHeroClass {
+  deftMarksman,
+  burstMage,
+  assassinJungler,
+  etc,
+} // contoh sederhana
+
 enum RecommendedLane { farmLane, midLane, clashLane, jungling, roaming }
+
 enum TeamFightPosition { frontline, backline, flank, initiator }
+
 enum GolemType { crimson, azure, both }
+
 enum GolemDependencyLevel { notDependent, slightlyDependent, highlyDependent }
+
 enum PeakPeriod { early, mid, late, balanced }
+
 enum Difficulty { easy, medium, hard, veryHard }
+
 enum AttackRange { melee, ranged }
+
 enum SkillType { passive, active }
+
 enum AbilityType { release, enhance, summon, speedUp, immunity, crowdControl }
+
 enum DamageType { physical, magical, trueDamage }
+
 enum SkinRarity { classic, common, rare, epic, legend, mythic, flawless }
+
+double survivalPct = 0.0;
 
 class GolemDependency {
   final GolemType type;
   final GolemDependencyLevel level; // seberapa tergantung
 
-  const GolemDependency({
-    required this.type,
-    required this.level,
-  });
+  const GolemDependency({required this.type, required this.level});
 
   // Factory untuk memudahkan pembuatan
   factory GolemDependency.crimson({required GolemDependencyLevel level}) {
@@ -37,9 +53,18 @@ class GolemDependency {
   }
 
   // Contoh nilai statis untuk hero yang berbeda:
-  static const GolemDependency notDependent = GolemDependency(type: GolemType.both, level: GolemDependencyLevel.notDependent);
-  static const GolemDependency slightlyDependent = GolemDependency(type: GolemType.azure, level: GolemDependencyLevel.slightlyDependent);
-  static const GolemDependency highlyDependent = GolemDependency(type: GolemType.crimson, level: GolemDependencyLevel.highlyDependent);
+  static const GolemDependency notDependent = GolemDependency(
+    type: GolemType.both,
+    level: GolemDependencyLevel.notDependent,
+  );
+  static const GolemDependency slightlyDependent = GolemDependency(
+    type: GolemType.azure,
+    level: GolemDependencyLevel.slightlyDependent,
+  );
+  static const GolemDependency highlyDependent = GolemDependency(
+    type: GolemType.crimson,
+    level: GolemDependencyLevel.highlyDependent,
+  );
 }
 
 class Partner {
@@ -73,17 +98,36 @@ class Hero {
   final BasicStats basic;
   final OffensiveStats offensive;
   final DefensiveStats defensive;
+  final double survivalPct;
+  final double attackPct;
+  final double abilityPct;
   final Map<String, Partner> bestPartners;
   final Map<String, Partner> suppressingHeroes;
   final Map<String, Partner> suppressedHeroes;
 
   Hero({
-    required this.id, required this.name, required this.nameCn, required this.title,
-    required this.imageAsset, required this.heroClass, required this.subHeroClass,
-    required this.coreAbilities, required this.recommendedLane, required this.teamFightPosition,
-    required this.golemDependency, required this.peakPeriods, required this.difficulty,
-    required this.basic, required this.offensive, required this.defensive,
-    this.bestPartners = const {}, this.suppressingHeroes = const {}, this.suppressedHeroes = const {},
+    required this.id,
+    required this.name,
+    required this.nameCn,
+    required this.title,
+    required this.imageAsset,
+    required this.heroClass,
+    required this.subHeroClass,
+    required this.coreAbilities,
+    required this.recommendedLane,
+    required this.teamFightPosition,
+    required this.golemDependency,
+    required this.peakPeriods,
+    required this.difficulty,
+    required this.survivalPct,
+    required this.attackPct,
+    required this.abilityPct,
+    required this.basic,
+    required this.offensive,
+    required this.defensive,
+    this.bestPartners = const {},
+    this.suppressingHeroes = const {},
+    this.suppressedHeroes = const {},
   });
 
   // Helper: cek apakah hero memiliki kelas tertentu
@@ -103,7 +147,8 @@ class Hero {
     T safeEnum<T>(List<T> values, String? value) {
       if (value == null) return values.first;
       return values.firstWhere(
-        (v) => v.toString().split('.').last.toLowerCase() == value.toLowerCase(),
+        (v) =>
+            v.toString().split('.').last.toLowerCase() == value.toLowerCase(),
         orElse: () => values.first,
       );
     }
@@ -122,8 +167,14 @@ class Hero {
       heroClass: (jsonDecode(map['hero_class']) as List)
           .map((e) => safeEnum(HeroClass.values, e.toString()))
           .toList(),
-      recommendedLane: safeEnum(RecommendedLane.values, map['recommended_lane']),
-      teamFightPosition: safeEnum(TeamFightPosition.values, map['team_fight_position']),
+      recommendedLane: safeEnum(
+        RecommendedLane.values,
+        map['recommended_lane'],
+      ),
+      teamFightPosition: safeEnum(
+        TeamFightPosition.values,
+        map['team_fight_position'],
+      ),
       peakPeriods: safeEnum(PeakPeriod.values, map['peak_periods']),
       difficulty: safeEnum(Difficulty.values, map['difficulty']),
       golemDependency: GolemDependency(
@@ -148,19 +199,24 @@ class Hero {
         physicalLifesteal: map['physical_lifesteal'].toDouble(),
         magicalLifesteal: map['magical_lifesteal'].toDouble(),
         cooldownReduction: map['cooldown_reduction'].toDouble(),
-        attackRange: map['attack_range'] == 'ranged' ? AttackRange.ranged : AttackRange.melee,
+        attackRange: map['attack_range'] == 'ranged'
+            ? AttackRange.ranged
+            : AttackRange.melee,
       ),
       defensive: DefensiveStats(
         resistance: map['resistance'].toDouble(),
         healthPer5s: map['health_per5s'],
         manaPer5s: map['mana_per5s'],
       ),
+      survivalPct: map['survival_pct'].toDouble(),
+      attackPct: map['attack_pct'].toDouble(),
+      abilityPct: map['ability_pct'].toDouble(),
 
       // Tambahkan relasi
       bestPartners: partners,
       suppressingHeroes: suppressing,
       suppressedHeroes: suppressed,
-      
+
       // ... (sisanya sama seperti factory sebelumnya, isi semua properti basic, offensive, defensive)
     );
   }
@@ -198,11 +254,10 @@ class Skin {
   Skin({required this.name, required this.rarity, required this.imageUrl});
 }
 
-
 class Item {
   final String id;
   final String name;
-  final int type;          // 1=Attack, 2=Magic, 3=Defense, 4=Boots, 5=Jungle, 7=Support
+  final int type; // 1=Attack, 2=Magic, 3=Defense, 4=Boots, 5=Jungle, 7=Support
   final int price;
   final int totalPrice;
   final String description1;
@@ -256,13 +311,14 @@ class Spell {
     );
   }
 
-  String get imageUrl => 'https://game.gtimg.cn/images/yxzj/img201606/summoner/${id}.png';
+  String get imageUrl =>
+      'https://game.gtimg.cn/images/yxzj/img201606/summoner/${id}.png';
 }
 
 class Emblem {
   final String id;
   final String name;
-  final String type;  // red, yellow, blue
+  final String type; // red, yellow, blue
   final int grade;
   final String description;
 
@@ -284,7 +340,8 @@ class Emblem {
     );
   }
 
-  String get imageUrl => 'https://game.gtimg.cn/images/yxzj/img201606/mingwen/${id}.png';
+  String get imageUrl =>
+      'https://game.gtimg.cn/images/yxzj/img201606/mingwen/${id}.png';
 }
 
 class BasicStats {
@@ -340,5 +397,17 @@ class DefensiveStats {
     required this.resistance,
     required this.healthPer5s,
     required this.manaPer5s,
+  });
+}
+
+class RecommendationResult {
+  final Hero hero;
+  final double totalFuzzyScore;
+  final List<String> reasons;
+
+  RecommendationResult({
+    required this.hero,
+    required this.totalFuzzyScore,
+    required this.reasons,
   });
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide Hero;
 import '../../models/hero_model.dart';
 import '../../services/database_service.dart';
-import '../../services/draft_logic.dart';
+import '../../services/fuzzy_draft_services.dart';
 
 class AcademyPage extends StatefulWidget {
   const AcademyPage({super.key});
@@ -98,18 +98,30 @@ class _AcademyPageState extends State<AcademyPage>
           if (!snapshot.hasData)
             return const Center(child: CircularProgressIndicator());
 
-          // AI Helper Logic
+          // AI Helper Logic (Fuzzy Draft)
+          final bannedIds = {
+            ...blueBans,
+            ...redBans,
+          }.whereType<String>().toSet();
+          final pickedIds = {
+            ...bluePicks.map((e) => e.id),
+            ...redPicks.map((e) => e.id),
+          };
+          final availableHeroes = _allHeroes
+              .where((h) => !bannedIds.contains(h.id) && !pickedIds.contains(h.id))
+              .toList();
+
+          final fuzzyService = FuzzyDraftService(allHeroes: _allHeroes);
           var recs = isBanPhase || totalPicked >= 10
-              ? <Map<String, dynamic>>[]
-              : DraftLogic.getRecommendations(
-                  allHeroes: _allHeroes,
-                  bannedIds: {
-                    ...blueBans,
-                    ...redBans,
-                  }.whereType<String>().toSet(),
-                  myTeamPicks: isBlueTurn ? bluePicks : redPicks,
-                  enemyTeamPicks: isBlueTurn ? redPicks : bluePicks,
+              ? <RecommendationResult>[]
+              : fuzzyService.recommendHeroesFuzzy(
+                  enemyPicks: isBlueTurn ? redPicks : bluePicks,
+                  allyPicks: isBlueTurn ? bluePicks : redPicks,
+                  availableHeroes: availableHeroes,
                 );
+
+          // Account for CurvedNavigationBar height (extendBody: true)
+          final navBarPadding = MediaQuery.of(context).padding.bottom + 30;
 
           return Column(
             children: [
@@ -126,6 +138,7 @@ class _AcademyPageState extends State<AcademyPage>
               if (isBanPhase) _buildBanControlInfo(),
               if (!isBanPhase && totalPicked < 10) _buildAIHelper(recs),
               if (totalPicked >= 10) _buildFinishedBar(),
+              SizedBox(height: navBarPadding),
             ],
           );
         },
@@ -444,10 +457,10 @@ class _AcademyPageState extends State<AcademyPage>
     );
   }
 
-  // AI Helper Panel
-  Widget _buildAIHelper(List<Map<String, dynamic>> recs) {
+  // AI Helper Panel (Fuzzy Logic)
+  Widget _buildAIHelper(List<RecommendationResult> recs) {
     return Container(
-      height: 110,
+      height: 150,
       decoration: const BoxDecoration(
         color: Color(0xFF161B22),
         border: Border(top: BorderSide(color: Color(0xFFC9A227))),
@@ -456,45 +469,139 @@ class _AcademyPageState extends State<AcademyPage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "AI STRATEGY: ${isBlueTurn ? 'BLUE' : 'RED'} SUGGESTION",
-            style: const TextStyle(
-              color: Colors.amber,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: recs.length,
-              itemBuilder: (c, i) => Container(
-                width: 100,
-                margin: const EdgeInsets.only(right: 12),
-                child: Column(
-                  children: [
-                    Text(
-                      recs[i]['hero'].name,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      recs[i]['reason'],
-                      style: const TextStyle(
-                        fontSize: 8,
-                        color: Colors.white54,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                    ),
-                  ],
+          Row(
+            children: [
+              const Icon(Icons.auto_awesome, color: Colors.amber, size: 14),
+              const SizedBox(width: 4),
+              Text(
+                "FUZZY AI: ${isBlueTurn ? 'BLUE' : 'RED'} SUGGESTION",
+                style: const TextStyle(
+                  color: Colors.amber,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Expanded(
+            child: recs.isEmpty
+                ? const Center(
+                    child: Text(
+                      "Tidak ada rekomendasi tersedia.",
+                      style: TextStyle(color: Colors.white24, fontSize: 10),
+                    ),
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: recs.length,
+                    itemBuilder: (c, i) {
+                      final rec = recs[i];
+                      return GestureDetector(
+                        onTap: () => _handleSelection(rec.hero),
+                        child: Container(
+                          width: 130,
+                          margin: const EdgeInsets.only(right: 10),
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Colors.amber.withValues(alpha: 0.3),
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(4),
+                                    child: Image.network(
+                                      rec.hero.imageAsset,
+                                      width: 28,
+                                      height: 28,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (_, __, ___) =>
+                                          const Icon(Icons.person, size: 28, color: Colors.white24),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          rec.hero.name,
+                                          style: const TextStyle(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text(
+                                          "Score: ${rec.totalFuzzyScore.toStringAsFixed(1)}",
+                                          style: const TextStyle(
+                                            fontSize: 8,
+                                            color: Colors.amber,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    for (int r = 0; r < rec.reasons.take(2).length; r++)
+                                      Padding(
+                                        padding: EdgeInsets.only(bottom: r == 0 ? 2 : 0),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "${r + 1}. ",
+                                              style: const TextStyle(
+                                                fontSize: 7,
+                                                color: Colors.amber,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                rec.reasons[r],
+                                                style: const TextStyle(
+                                                  fontSize: 7,
+                                                  color: Colors.white54,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    if (rec.reasons.isEmpty)
+                                      const Text(
+                                        "Pilihan Fleksibel",
+                                        style: TextStyle(
+                                          fontSize: 7,
+                                          color: Colors.white54,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
           ),
         ],
       ),
