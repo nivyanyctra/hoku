@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Hero;
 import '../../models/hero_model.dart';
 import '../../services/database_service.dart';
 import '../../services/fuzzy_draft_services.dart';
+import '../../services/item_recommendation_service.dart';
 
 class AcademyPage extends StatefulWidget {
   const AcademyPage({super.key});
@@ -30,6 +31,8 @@ class _AcademyPageState extends State<AcademyPage>
   late AnimationController _glowController;
   late Animation<double> _glowAnimation;
 
+  Hero? selectedHeroForRec;
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +55,7 @@ class _AcademyPageState extends State<AcademyPage>
 
   Future<List<Hero>> _loadData() async {
     final heroes = await DatabaseService.instance.getAllHeroesWithRelations();
+    await ItemRecommendationService.instance.loadItems();
     setState(() => _allHeroes = heroes);
     return heroes;
   }
@@ -65,6 +69,7 @@ class _AcademyPageState extends State<AcademyPage>
       isBanPhase = true;
       banSide = "blue";
       banStep = 0;
+      selectedHeroForRec = null;
     });
   }
 
@@ -122,6 +127,7 @@ class _AcademyPageState extends State<AcademyPage>
 
           // Account for CurvedNavigationBar height (extendBody: true)
           final navBarPadding = MediaQuery.of(context).padding.bottom + 30;
+          final isFinished = totalPicked >= 10;
 
           return Column(
             children: [
@@ -130,14 +136,16 @@ class _AcademyPageState extends State<AcademyPage>
                 child: Row(
                   children: [
                     _buildPickSide(bluePicks, "BLUE TEAM", Colors.blue, true),
-                    _buildHeroPool(),
+                    isFinished 
+                        ? _buildAnalysisPanel()
+                        : _buildHeroPool(),
                     _buildPickSide(redPicks, "RED TEAM", Colors.red, false),
                   ],
                 ),
               ),
               if (isBanPhase) _buildBanControlInfo(),
-              if (!isBanPhase && totalPicked < 10) _buildAIHelper(recs),
-              if (totalPicked >= 10) _buildFinishedBar(),
+              if (!isBanPhase && !isFinished) _buildAIHelper(recs),
+              if (isFinished) _buildFinishedBar(),
               SizedBox(height: navBarPadding),
             ],
           );
@@ -243,32 +251,53 @@ class _AcademyPageState extends State<AcademyPage>
               child: AnimatedBuilder(
                 animation: _glowAnimation,
                 builder: (context, child) {
-                  return Container(
-                    margin: const EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.03),
-                      border: Border.all(
-                        color: isActiveSlot
-                            ? color.withValues(alpha: _glowAnimation.value)
-                            : Colors.white12,
-                        width: isActiveSlot ? 2 : 1,
+                  bool isSelectedForRec = (totalPicked >= 10) && selectedHeroForRec == h;
+                  return GestureDetector(
+                    onTap: (h != null && totalPicked >= 10)
+                        ? () {
+                            setState(() {
+                              selectedHeroForRec = h;
+                            });
+                          }
+                        : null,
+                    child: Container(
+                      margin: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.03),
+                        border: Border.all(
+                          color: isSelectedForRec
+                              ? const Color(0xFFC9A227)
+                              : isActiveSlot
+                                  ? color.withValues(alpha: _glowAnimation.value)
+                                  : Colors.white12,
+                          width: isSelectedForRec ? 2.5 : (isActiveSlot ? 2 : 1),
+                        ),
+                        boxShadow: isSelectedForRec
+                            ? [
+                                BoxShadow(
+                                  color: const Color(0xFFC9A227).withValues(alpha: 0.3),
+                                  blurRadius: 8,
+                                  spreadRadius: 1,
+                                )
+                              ]
+                            : null,
+                        image: h != null
+                            ? DecorationImage(
+                                image: NetworkImage(h.imageAsset),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
                       ),
-                      image: h != null
-                          ? DecorationImage(
-                              image: NetworkImage(h.imageAsset),
-                              fit: BoxFit.cover,
+                      child: h == null
+                          ? Center(
+                              child: Icon(
+                                isActiveSlot ? Icons.add : Icons.person,
+                                size: 16,
+                                color: Colors.white10,
+                              ),
                             )
                           : null,
                     ),
-                    child: h == null
-                        ? Center(
-                            child: Icon(
-                              isActiveSlot ? Icons.add : Icons.person,
-                              size: 16,
-                              color: Colors.white10,
-                            ),
-                          )
-                        : null,
                   );
                 },
               ),
@@ -647,8 +676,352 @@ class _AcademyPageState extends State<AcademyPage>
           } else {
             redPicks.add(h);
           }
+          
+          if (totalPicked == 10) {
+            selectedHeroForRec = bluePicks.isNotEmpty ? bluePicks.first : null;
+          }
         }
       }
     });
+  }
+
+  Widget _buildAnalysisPanel() {
+    if (selectedHeroForRec == null) {
+      return const Expanded(
+        flex: 3,
+        child: Center(
+          child: Text(
+            "PILIH HERO UNTUK REKOMENDASI",
+            style: TextStyle(color: Colors.white24, fontSize: 12),
+          ),
+        ),
+      );
+    }
+
+    final hero = selectedHeroForRec!;
+    bool isBlueHero = bluePicks.contains(hero);
+    List<Hero> enemies = isBlueHero ? redPicks : bluePicks;
+    List<Hero> allies = isBlueHero ? bluePicks : redPicks;
+
+    final recResult = ItemRecommendationService.instance.recommendItems(
+      hero: hero,
+      enemyPicks: enemies,
+      allyPicks: allies,
+    );
+
+    return Expanded(
+      flex: 3,
+      child: Container(
+        color: const Color(0xFF0F141C),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header Hero Info
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              color: Colors.black45,
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundImage: NetworkImage(hero.imageAsset),
+                    backgroundColor: Colors.grey[900],
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          hero.name,
+                          style: const TextStyle(
+                            color: Colors.amber,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "${hero.heroClassString} • ${hero.recommendedLane.name.toUpperCase()}",
+                          style: const TextStyle(color: Colors.white54, fontSize: 10),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Mini tag for Side
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: isBlueHero ? Colors.blue.withValues(alpha: 0.2) : Colors.red.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: isBlueHero ? Colors.blue : Colors.red,
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      isBlueHero ? "BLUE SIDE" : "RED SIDE",
+                      style: TextStyle(
+                        color: isBlueHero ? Colors.blueAccent : Colors.redAccent,
+                        fontSize: 8,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Recommended Build Section
+            const Padding(
+              padding: EdgeInsets.only(top: 8, left: 12, bottom: 4),
+              child: Text(
+                "REKOMENDASI BUILD ITEM (SCROLL)",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+
+            // Vertical scrollable list of items
+            Expanded(
+              flex: 4,
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                itemCount: recResult.items.length,
+                itemBuilder: (context, idx) {
+                  final item = recResult.items[idx];
+                  return GestureDetector(
+                    onTap: () {
+                      _showItemDetails(context, item);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.04),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: Colors.amber.withValues(alpha: 0.15),
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          // Number Badge (Slot index)
+                          Container(
+                            width: 18,
+                            height: 18,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.amber.withValues(alpha: 0.2),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.amber, width: 0.5),
+                            ),
+                            child: Text(
+                              "${idx + 1}",
+                              style: const TextStyle(
+                                color: Colors.amber,
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: Image.network(
+                              item.imageUrl,
+                              width: 32,
+                              height: 32,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Container(
+                                color: Colors.grey[900],
+                                width: 32,
+                                height: 32,
+                                child: const Icon(Icons.inventory, size: 14, color: Colors.white30),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.name,
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  item.category,
+                                  style: const TextStyle(fontSize: 8, color: Colors.amber),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.arrow_forward_ios, size: 10, color: Colors.white30),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            // Fired Rules / Analysis
+            const Padding(
+              padding: EdgeInsets.only(top: 6, left: 12, bottom: 4),
+              child: Text(
+                "ANALISIS & STRATEGI",
+                style: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 9,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+
+            Expanded(
+              flex: 3,
+              child: Container(
+                margin: const EdgeInsets.only(left: 12, right: 12, bottom: 10),
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.white10),
+                ),
+                child: recResult.firedRules.isEmpty
+                    ? const Center(
+                        child: Text(
+                          "Menggunakan build standar hero.",
+                          style: TextStyle(color: Colors.white38, fontSize: 10),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: recResult.firedRules.length,
+                        itemBuilder: (c, i) {
+                          final rule = recResult.firedRules[i];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Icon(Icons.arrow_right, size: 14, color: Colors.amber),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    rule,
+                                    style: const TextStyle(color: Colors.white70, fontSize: 9),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showItemDetails(BuildContext context, HokItem item) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF161B22),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: const BorderSide(color: Color(0xFFC9A227), width: 1),
+          ),
+          title: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: Image.network(
+                  item.imageUrl,
+                  width: 42,
+                  height: 42,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => const Icon(Icons.inventory, size: 42),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.name,
+                      style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      item.category,
+                      style: const TextStyle(color: Colors.amber, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Stats:",
+                  style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, fontSize: 13),
+                ),
+                const SizedBox(height: 4),
+                ...item.stats.entries.map((entry) {
+                  String valStr = entry.value.toString();
+                  if (entry.key.toLowerCase().contains("percent") || 
+                      entry.key.toLowerCase().contains("reduction") || 
+                      entry.key.toLowerCase().contains("rate") ||
+                      entry.value < 1.0) {
+                    valStr = "${(entry.value * 100).toStringAsFixed(1)}%";
+                  } else {
+                    valStr = "+${entry.value.toStringAsFixed(0)}";
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: Text(
+                      "• ${entry.key}: $valStr",
+                      style: const TextStyle(color: Colors.white70, fontSize: 12),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 12),
+                const Text(
+                  "Passive:",
+                  style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, fontSize: 13),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  item.passive,
+                  style: const TextStyle(color: Colors.white70, fontSize: 12, fontStyle: FontStyle.italic),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Tutup", style: TextStyle(color: Colors.amber)),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
