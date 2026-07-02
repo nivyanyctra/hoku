@@ -50,7 +50,7 @@ class FuzzyDraftService {
       List<String> reasons = [];
 
       double muLane = occupiedLanes.contains(hero.recommendedLane) ? 0.0 : 1.0;
-)
+
       double muJungler = 0.5; // Default neutral
       if (hero.golemDependency.level == GolemDependencyLevel.highlyDependent) {
         if (hero.recommendedLane == RecommendedLane.jungling && !occupiedLanes.contains(RecommendedLane.jungling)) {
@@ -172,7 +172,7 @@ class FuzzyDraftService {
       if (muLane > 0.8) {
         reasons.add("Mengisi lane ${hero.recommendedLane.name.toUpperCase()} yang belum diisi tim.");
       }
-      if (muJungler > 0.4) {
+      if (muJungler > 0.9) {
         reasons.add("Sangat cocok karena tim butuh core Jungler.");
       }
       if (muFrontline > 0.8 && hero.teamFightPosition == TeamFightPosition.frontline) {
