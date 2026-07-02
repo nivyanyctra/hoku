@@ -49,10 +49,8 @@ class FuzzyDraftService {
     for (var hero in availableHeroes) {
       List<String> reasons = [];
 
-      // 1. Lane Suitability (μ_Lane)
       double muLane = occupiedLanes.contains(hero.recommendedLane) ? 0.0 : 1.0;
-
-      // 2. Golem/Jungler Suitability (μ_Jungler)
+)
       double muJungler = 0.5; // Default neutral
       if (hero.golemDependency.level == GolemDependencyLevel.highlyDependent) {
         if (hero.recommendedLane == RecommendedLane.jungling && !occupiedLanes.contains(RecommendedLane.jungling)) {
@@ -174,10 +172,10 @@ class FuzzyDraftService {
       if (muLane > 0.8) {
         reasons.add("Mengisi lane ${hero.recommendedLane.name.toUpperCase()} yang belum diisi tim.");
       }
-      if (muJungler > 0.8) {
-        reasons.add("Sangat cocok karena tim butuh core Jungler dependen-buff.");
+      if (muJungler > 0.4) {
+        reasons.add("Sangat cocok karena tim butuh core Jungler.");
       }
-      if (muFrontline > 0.6 && hero.teamFightPosition == TeamFightPosition.frontline) {
+      if (muFrontline > 0.8 && hero.teamFightPosition == TeamFightPosition.frontline) {
         reasons.add("Tim butuh frontline (Survival tim rendah). ${hero.name} membantu dengan survival tinggi (${hero.survivalPct.toStringAsFixed(0)}%).");
       }
       if (muCC > 0.6 && hero.coreAbilities.contains('Crowd Control')) {
