@@ -583,47 +583,61 @@ class _AcademyPageState extends State<AcademyPage>
                               ),
                               const SizedBox(height: 4),
                               Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    for (int r = 0; r < rec.reasons.take(2).length; r++)
-                                      Padding(
-                                        padding: EdgeInsets.only(bottom: r == 0 ? 2 : 0),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "${r + 1}. ",
-                                              style: const TextStyle(
-                                                fontSize: 7,
-                                                color: Colors.amber,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                rec.reasons[r],
-                                                style: const TextStyle(
-                                                  fontSize: 7,
-                                                  color: Colors.white54,
-                                                ),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    if (rec.reasons.isEmpty)
-                                      const Text(
+                                child: rec.reasons.isEmpty
+                                    ? const Text(
                                         "Pilihan Fleksibel",
                                         style: TextStyle(
                                           fontSize: 7,
                                           color: Colors.white54,
                                         ),
+                                      )
+                                    : ShaderMask(
+                                        shaderCallback: (Rect bounds) {
+                                          return LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.white,
+                                              Colors.white,
+                                              Colors.white,
+                                              Colors.transparent,
+                                            ],
+                                            stops: const [0.0, 0.7, 0.85, 1.0],
+                                          ).createShader(bounds);
+                                        },
+                                        blendMode: BlendMode.dstIn,
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.zero,
+                                          itemCount: rec.reasons.length,
+                                          itemBuilder: (context, r) {
+                                            return Padding(
+                                              padding: EdgeInsets.only(bottom: 2),
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${r + 1}. ",
+                                                    style: const TextStyle(
+                                                      fontSize: 7,
+                                                      color: Colors.amber,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      rec.reasons[r],
+                                                      style: const TextStyle(
+                                                        fontSize: 7,
+                                                        color: Colors.white54,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
-                                  ],
-                                ),
                               ),
                             ],
                           ),
