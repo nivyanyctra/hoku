@@ -175,13 +175,13 @@ class FuzzyDraftService {
       if (muJungler > 0.9) {
         reasons.add("Sangat cocok karena tim butuh core Jungler.");
       }
-      if (muFrontline > 0.8 && hero.teamFightPosition == TeamFightPosition.frontline) {
+      if (muFrontline > 0.6 && hero.teamFightPosition == TeamFightPosition.frontline) {
         reasons.add("Tim butuh frontline (Survival tim rendah). ${hero.name} membantu dengan survival tinggi (${hero.survivalPct.toStringAsFixed(0)}%).");
       }
       if (muCC > 0.6 && hero.coreAbilities.contains('Crowd Control')) {
         reasons.add("Musuh lincah/mobile. Crowd Control ${hero.name} dapat menguncinya.");
       }
-      if (muDamage > 0.6) {
+      if (muDamage > 0.45) {
         if (needPhysicalFuzzy > 0.2 && hero.attackPct > 60.0) {
           reasons.add("Tim kelebihan Magic Damage, hero ini memberikan Physical Attack alternatif.");
         } else if (needMagicalFuzzy > 0.2 && hero.abilityPct > 60.0) {
