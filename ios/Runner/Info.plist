@@ -2,6 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- Izin Internet -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+	<key>NSAllowsArbitraryLoads</key>
+	<true/>
+	</dict>
+	<!-- Izin Kalender (Untuk fitur Remind Me) -->
+	<key>NSCalendarsUsageDescription</key>
+	<string>HOKU membutuhkan akses kalender untuk membuat pengingat jadwal turnamen.</string>
+	<!-- Izin Buka Link (YouTube, BiliBili, Browser) -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>https</string>
+	<string>http</string>
+	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

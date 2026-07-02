@@ -304,9 +304,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _teamIcon(String url) => CircleAvatar(
-    radius: 18,
-    backgroundColor: Colors.white10,
-    backgroundImage: url.isNotEmpty ? NetworkImage(url) : null,
+    radius: 24,
+    backgroundColor: Colors.white.withOpacity(0.05),
+    child: url.isNotEmpty
+        ? Image.network(url, width: 32)
+        : const Icon(Icons.shield, color: Colors.white10),
   );
 
   Widget _buildTacticsCard() {
