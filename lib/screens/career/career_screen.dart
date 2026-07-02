@@ -148,7 +148,7 @@ class _CareerPageState extends State<CareerPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
-        title: const Text("HOKU CAREER", style: TextStyle(color: Color(0xFFC9A227), fontSize: 16, fontWeight: FontWeight.bold)),
+        title: const Text("HOKU CAREER", style: TextStyle(color: Color(0xFFC9A227), fontSize: 14, fontWeight: FontWeight.bold)),
         actions: [
           // Tombol Tambah
           IconButton(

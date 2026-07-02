@@ -232,6 +232,7 @@ class _AddEditCareerScreenState extends State<AddEditCareerScreen> {
             ),
             _label("Details"),
             _input(_reqCtrl, "Job Description", Icons.description, maxLines: 6),
+            _label("Application Link"),
             _input(_linkCtrl, "Application Link", Icons.link),
             const SizedBox(height: 30),
             ElevatedButton(
@@ -299,7 +300,7 @@ class _AddEditCareerScreenState extends State<AddEditCareerScreen> {
         hintText: h,
         prefixIcon: Icon(i, size: 18),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Color(0xFF0D1117),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,

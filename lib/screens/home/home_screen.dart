@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 12),
                     _buildMatchCarousel(),
                     const SizedBox(height: 30),
-                    _buildSectionTitle("Strategy & Tactics", "Dojo", 3),
+                    _buildSectionTitle("Strategy & Tactics", "Academy", 3),
                     const SizedBox(height: 12),
                     _buildTacticsCard(),
                     const SizedBox(height: 30),
@@ -316,17 +316,24 @@ class _HomePageState extends State<HomePage> {
         width: double.infinity,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(15),
+          image: const DecorationImage(
+            image: NetworkImage(
+              "https://world.honorofkings.com/zlkdatasys/images/image/20230217/16766161908896.png",
+            ),
+            fit: BoxFit.cover,
+            opacity: 0.3,
+          ),
           gradient: const LinearGradient(
             colors: [Color(0xFF1D4ED8), Color(0xFF1E3A8A)],
           ),
         ),
-        child: const Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.psychology, color: Colors.white, size: 30),
-            SizedBox(height: 10),
-            Text(
+            const Icon(Icons.psychology, color: Colors.white, size: 40),
+            const SizedBox(height: 10),
+            const Text(
               "DRAFT SIMULATOR",
               style: TextStyle(
                 fontSize: 18,
@@ -334,9 +341,25 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white,
               ),
             ),
-            Text(
-              "Analyze counters with AI Expert System",
+            const Text(
+              "Analyze counters and build winning team comps with our AI Expert System.",
               style: TextStyle(color: Colors.white70, fontSize: 12),
+            ),
+            const SizedBox(height: 15),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFC9A227),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text(
+                "START ANALYSIS",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
+              ),
             ),
           ],
         ),

@@ -13,6 +13,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _idController = TextEditingController();
   final _passController = TextEditingController();
   bool _isLoading = false;
+  bool isObs = true;
 
   void _handleLogin() async {
     if (_idController.text.isEmpty || _passController.text.isEmpty) {
@@ -84,8 +85,16 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 15),
               TextField(
                 controller: _passController,
-                obscureText: true,
+                obscureText: isObs,
                 decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isObs = !isObs;
+                      });
+                    },
+                    icon: Icon(isObs ? Icons.visibility : Icons.visibility_off),
+                  ),
                   hintText: "Password",
                   filled: true,
                   fillColor: Colors.white.withOpacity(0.05),
