@@ -201,7 +201,7 @@ class _AddEditCareerScreenState extends State<AddEditCareerScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
-                        color: Colors.white10,
+                        color: Color.fromARGB(255, 20, 27, 38),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(_selectedCurrency),
@@ -280,6 +280,7 @@ class _AddEditCareerScreenState extends State<AddEditCareerScreen> {
       controller: c,
       maxLines: maxLines,
       readOnly: isDate,
+      style: const TextStyle(color: Colors.white, fontSize: 14),
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
       inputFormatters: isNumber
           ? [FilteringTextInputFormatter.digitsOnly]
@@ -298,9 +299,10 @@ class _AddEditCareerScreenState extends State<AddEditCareerScreen> {
           : null,
       decoration: InputDecoration(
         hintText: h,
+        hintStyle: const TextStyle(color: Color.fromARGB(233, 255, 255, 255), fontSize: 14),
         prefixIcon: Icon(i, size: 18),
         filled: true,
-        fillColor: Color(0xFF0D1117),
+        fillColor: Color.fromARGB(255, 20, 27, 38),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
