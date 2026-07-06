@@ -34,7 +34,7 @@ class _LeaguesPageState extends State<LeaguesPage> {
         setState(() {
           _allMatches = data;
           _isLoading = false;
-          _applyFilters(); // Jalankan filter pertama kali
+          _applyFilters();
         });
       }
     });
@@ -46,36 +46,33 @@ class _LeaguesPageState extends State<LeaguesPage> {
 
     setState(() {
       _filteredMatches = _allMatches.where((m) {
-        if (m.beginAt.isEmpty) return false;
         DateTime mDate = DateTime.parse(m.beginAt).toLocal();
         DateTime mDateOnly = DateTime(mDate.year, mDate.month, mDate.day);
 
         // 1. Logika Tanggal
         bool matchDate;
         if (_selectedDate != null) {
-          // Jika pilih tanggal via picker, tampilkan HANYA tanggal itu (bisa masa lalu)
+          // Jika user pilih tanggal, tampilkan HANYA tanggal tersebut
           matchDate = mDateOnly.isAtSameMomentAs(_selectedDate!);
         } else {
-          // Default: Tampilkan Ongoing, Upcoming, dan yang Finished HARI INI
-          // Intinya: Semua yang waktunya >= jam 00:00 hari ini
+          // Default: LIVE + UPCOMING + FINISHED HARI INI
           matchDate =
+              m.status == "running" ||
               mDate.isAfter(startOfToday) ||
-              mDate.isAtSameMomentAs(startOfToday);
+              mDateOnly.isAtSameMomentAs(startOfToday);
         }
 
-        // 2. Logika Search Team
+        // 2. Logika Search & League
         bool matchSearch =
             m.teamA.toLowerCase().contains(_searchQuery.toLowerCase()) ||
             m.teamB.toLowerCase().contains(_searchQuery.toLowerCase());
-
-        // 3. Logika Filter League
         bool matchLeague =
             _selectedLeague == "All" || m.leagueName == _selectedLeague;
 
         return matchDate && matchSearch && matchLeague;
       }).toList();
 
-      // Sort: LIVE di atas
+      // Sorting
       _filteredMatches.sort((a, b) {
         if (a.status == "running" && b.status != "running") return -1;
         if (b.status == "running" && a.status != "running") return 1;
@@ -164,7 +161,7 @@ class _LeaguesPageState extends State<LeaguesPage> {
                 _applyFilters();
               },
               child: ListView.builder(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.only(bottom: 90, top: 12, left: 15, right: 15),
                 itemCount: _filteredMatches.length,
                 itemBuilder: (context, index) =>
                     _buildMatchCard(_filteredMatches[index]),
@@ -239,7 +236,7 @@ class _LeaguesPageState extends State<LeaguesPage> {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Row(
         children: [
-          // DATE PICKER
+          // DATE PICKER CHIP
           ActionChip(
             backgroundColor: _selectedDate != null
                 ? const Color(0xFFC9A227)
@@ -249,20 +246,30 @@ class _LeaguesPageState extends State<LeaguesPage> {
                   ? "Select Date"
                   : DateFormat('dd MMM yyyy').format(_selectedDate!),
               style: TextStyle(
-                color: _selectedDate != null ? Colors.black : Colors.white,
+                color: _selectedDate != null ? Colors.black : Colors.white70,
                 fontSize: 10,
+                fontWeight: FontWeight.bold,
               ),
             ),
             onPressed: () async {
+              // PERBAIKAN: initialDate harus _selectedDate jika ada, supaya tidak balik ke hari ini terus
               DateTime? picked = await showDatePicker(
                 context: context,
-                initialDate: now(),
-                firstDate: DateTime.now().subtract(const Duration(days: 30)),
-                lastDate: DateTime(2030),
+                initialDate:
+                    _selectedDate ??
+                    DateTime.now(), // Gunakan tanggal yang sedang aktif
+                firstDate: DateTime.now().subtract(
+                  const Duration(days: 7),
+                ), // Limit 7 hari past
+                lastDate: DateTime.now().add(
+                  const Duration(days: 28),
+                ), // Limit 28 hari upcoming
                 builder: (context, child) => Theme(
                   data: ThemeData.dark().copyWith(
                     colorScheme: const ColorScheme.dark(
-                      primary: Color(0xFFC9A227),
+                      primary: Color(0xFFC9A227), // Header warna gold
+                      onPrimary: Colors.black,
+                      surface: Color(0xFF161B22),
                     ),
                   ),
                   child: child!,
@@ -280,7 +287,7 @@ class _LeaguesPageState extends State<LeaguesPage> {
               }
             },
           ),
-          const VerticalDivider(color: Colors.white12),
+          const SizedBox(width: 8),
           // LEAGUE CHIPS
           ...leagues.map(
             (league) => Padding(
@@ -296,7 +303,7 @@ class _LeaguesPageState extends State<LeaguesPage> {
                 labelStyle: TextStyle(
                   color: _selectedLeague == league
                       ? Colors.black
-                      : Colors.white,
+                      : Colors.white70,
                 ),
                 backgroundColor: Colors.white10,
               ),
