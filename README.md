@@ -156,3 +156,17 @@ Engine berbasis aturan (forward-chaining) memilih item secara bertahap:
 ## Lisensi
 
 Proyek ini dibuat untuk keperluan pembelajaran dan portofolio. Data hero dan item mengacu pada game Honor of Kings milik TiMi Studio / Tencent.
+
+---
+
+## Deskripsi Kelompok
+Proyek ini dibuat untuk memenuhi tugas mata kuliah Sistem Pakar dan Mobile Programming di jurusan Teknik Informatika Universitas Catur Insan Cendekia.
+
+Anggota Kelompok:
+- Rizki Adha Sulaeman - 20241020084
+- Sakti Andimas Pratama - 20241020019
+- Mohammad Rafi' - 20241020016
+- M. Marlo Putra Sagara - 20241020062
+- Vilvi Wanda Sandria - 20241020077
+- Puput Nur Annisa - 20241020044
+
